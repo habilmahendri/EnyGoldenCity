@@ -1,0 +1,74 @@
+name: Claude PR Review
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+    branches: [main]
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+  id-token: write
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    # secrets are not readable from a job-level `if`, so surface it as an env
+    # value the review step can gate on. A fork or a repository that has not set
+    # the key skips the review instead of failing a check nobody can fix.
+    env:
+      HAS_ANTHROPIC_KEY: ${{ secrets.ANTHROPIC_API_KEY != '' }}
+    # Skip reviews triggered by Claude's own commits to prevent loops
+    if: |
+      github.event.pull_request.user.login != 'claude[bot]' &&
+      github.event.sender.login != 'claude[bot]' &&
+      !contains(github.event.pull_request.title, '[skip-review]')
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Fetch base branch
+        run: git fetch origin ${{ github.event.pull_request.base.ref }}
+
+      - name: Report skipped review
+        if: env.HAS_ANTHROPIC_KEY != 'true'
+        run: echo "ANTHROPIC_API_KEY is not set for this repository; skipping the Claude review." >> "$GITHUB_STEP_SUMMARY"
+
+      - uses: anthropics/claude-code-action@v1
+        if: env.HAS_ANTHROPIC_KEY == 'true'
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          trigger_phrase: ""
+          prompt: |
+            You are reviewing a pull request for a Kotlin Multiplatform project.
+
+            The base branch has been fetched. Use this to get the diff:
+              git diff origin/${{ github.event.pull_request.base.ref }}...HEAD
+
+            Review the PR diff. Focus on:
+            - Scope leaks — changes that don't belong in this PR
+            - Architecture consistency — single source of truth, UDF, layer boundaries
+            - Business logic placement — must not live in composables or Android components
+            - State and model boundaries — explicit UI state, separate one-time events
+            - KMP source-set correctness — commonMain valid for all targets
+            - Compose/UI performance — unnecessary recomposition, missing keys
+            - Coroutine/cancellation/concurrency issues
+            - Regression risks — broken edge cases, missing error handling
+            - Missing tests for new business rules
+
+            Post findings as specific review comments with severity (high/medium/low).
+
+            End with a summary comment including:
+            1. Overall assessment
+            2. High-severity issues
+            3. Medium-severity issues
+            4. What looks good
+
+            Do NOT apply fixes. Review only.
+          claude_args: "--model claude-sonnet-4-6 --max-turns 15"
+          additional_permissions: "Bash(git diff *),Bash(git show *),Read(*),Glob(*),Grep(*)"
+          show_full_output: true

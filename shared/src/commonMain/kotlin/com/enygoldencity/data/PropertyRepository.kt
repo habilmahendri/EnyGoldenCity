@@ -3,6 +3,58 @@ package com.enygoldencity.data
 object PropertyRepository {
     val properties: List<Property> = listOf(
         Property(
+            id = "cedar",
+            name = "Cedar",
+            cluster = Cluster.Greenwood,
+            priceLabel = "Rp931 jt",
+            priceValueMio = 931,
+            bedrooms = 3, bathrooms = 2, carport = 1,
+            landArea = "60 m²", buildingArea = "45 m²",
+            imageFront = "https://goldencitybekasi.net/wp-content/uploads/2026/06/type-cedar-cluster-greenwood-scaled.jpg",
+            imagePlan = "https://goldencitybekasi.net/wp-content/uploads/2026/06/g9-scaled.jpg",
+            description = "Greenwood 2 Lantai — hunian modern dikelilingi hijau asri. DP 10% • Promo Rp20 jt.",
+            promo = "DP 10% • Promo Rp20 jt", floors = "2 Lantai"
+        ),
+        Property(
+            id = "oakwood",
+            name = "Oakwood",
+            cluster = Cluster.Greenwood,
+            priceLabel = "Rp1,05 Miliar",
+            priceValueMio = 1050,
+            bedrooms = 3, bathrooms = 2, carport = 1,
+            landArea = "72 m²", buildingArea = "54 m²",
+            imageFront = "https://goldencitybekasi.net/wp-content/uploads/2026/06/greenwood-scaled.jpg",
+            imagePlan = "https://goldencitybekasi.net/wp-content/uploads/2026/06/g10-scaled.jpg",
+            description = "Greenwood Oakwood — 2 lantai, sirkulasi udara optimal.",
+            promo = "DP 10% • Promo Rp20 jt", floors = "2 Lantai"
+        ),
+        Property(
+            id = "redwood",
+            name = "Redwood",
+            cluster = Cluster.Greenwood,
+            priceLabel = "Rp1,18 Miliar",
+            priceValueMio = 1180,
+            bedrooms = 4, bathrooms = 3, carport = 2,
+            landArea = "84 m²", buildingArea = "72 m²",
+            imageFront = "https://goldencitybekasi.net/wp-content/uploads/2026/06/greenwood-scaled.jpg",
+            imagePlan = "https://goldencitybekasi.net/wp-content/uploads/2026/06/g10-scaled.jpg",
+            description = "Redwood — tipe terbesar Greenwood, halaman luas.",
+            promo = "DP 10% • Promo Rp20 jt", floors = "2 Lantai"
+        ),
+        Property(
+            id = "topaz",
+            name = "Topaz",
+            cluster = Cluster.Diamond,
+            priceLabel = "Rp830 jt",
+            priceValueMio = 830,
+            bedrooms = 2, bathrooms = 2, carport = 1,
+            landArea = "50 m²", buildingArea = "40 m²",
+            imageFront = "https://goldencitybekasi.net/wp-content/uploads/2026/06/type-jade-cluster-diamond-scaled.jpg",
+            imagePlan = "https://goldencitybekasi.net/wp-content/uploads/2026/06/type-jade-cluster-diamond-scaled.jpg",
+            description = "Diamond Topaz — compact 2 lantai, pilihan pertama keluarga muda.",
+            promo = "DP 10% • Promo Rp20 jt", floors = "2 Lantai"
+        ),
+        Property(
             id = "jade",
             name = "Jade",
             cluster = Cluster.Diamond,
@@ -12,7 +64,8 @@ object PropertyRepository {
             landArea = "56 m²", buildingArea = "57 m²",
             imageFront = "https://www.golden-city-bekasi.com/app/uploads/sites/26/2023/08/Jade-depan.webp",
             imagePlan = "https://www.golden-city-bekasi.com/app/uploads/sites/26/2023/08/Jade-denah.webp",
-            description = "Minimalis modern, 3KT 3KM, cocok keluarga muda."
+            description = "Diamond Jade — minimalis modern 3KT 3KM.",
+            promo = "DP 10% • Promo Rp20 jt", floors = "2 Lantai"
         ),
         Property(
             id = "jade-plus",
@@ -24,11 +77,12 @@ object PropertyRepository {
             landArea = "60 m²", buildingArea = "66 m²",
             imageFront = "https://www.golden-city-bekasi.com/app/uploads/sites/26/2023/08/Jade-depan-1.webp",
             imagePlan = "https://www.golden-city-bekasi.com/app/uploads/sites/26/2023/08/Jade-denah-1.webp",
-            description = "Upgrade Jade dengan 4 kamar tidur lega."
+            description = "Jade+ 4KT — upgrade ruang keluarga lega.",
+            promo = "DP 10% • Promo Rp20 jt", floors = "2 Lantai"
         ),
         Property(
             id = "cristal",
-            name = "Cristal",
+            name = "Crystal",
             cluster = Cluster.Diamond,
             priceLabel = "Rp865 jt",
             priceValueMio = 865,
@@ -36,7 +90,8 @@ object PropertyRepository {
             landArea = "60 m²", buildingArea = "60 m²",
             imageFront = "https://www.golden-city-bekasi.com/app/uploads/sites/26/2023/08/Cristal-depan.webp",
             imagePlan = "https://www.golden-city-bekasi.com/app/uploads/sites/26/2023/08/Cristal-denah.webp",
-            description = "Desain elegan 3KT 2KM, sirkulasi cahaya maksimal."
+            description = "Crystal — desain elegan 3KT 2KM.",
+            promo = "DP 10% • Promo Rp20 jt", floors = "2 Lantai"
         ),
         Property(
             id = "emerald",
@@ -48,7 +103,8 @@ object PropertyRepository {
             landArea = "72 m²", buildingArea = "68 m²",
             imageFront = "https://www.golden-city-bekasi.com/app/uploads/sites/26/2023/08/Emerald-depan.webp",
             imagePlan = "https://www.golden-city-bekasi.com/app/uploads/sites/26/2023/08/Jade-denah-2.webp",
-            description = "4KT 3KM, tanah 72m² — ruang keluarga luas."
+            description = "Emerald 4KT — tanah 72m² lega.",
+            promo = "DP 10% • Promo Rp20 jt", floors = "2 Lantai"
         ),
         Property(
             id = "diamond",
@@ -60,7 +116,8 @@ object PropertyRepository {
             landArea = "105 m²", buildingArea = "87 m²",
             imageFront = "https://www.golden-city-bekasi.com/app/uploads/sites/26/2023/08/Diamond-depan.webp",
             imagePlan = "https://www.golden-city-bekasi.com/app/uploads/sites/26/2023/08/Diamond-denah.webp",
-            description = "Tipe premium 105m², halaman luas & carport 2."
+            description = "Diamond — tipe premium 105m².",
+            promo = "DP 10% • Promo Rp20 jt", floors = "2 Lantai"
         ),
         Property(
             id = "sapphire",
@@ -72,19 +129,60 @@ object PropertyRepository {
             landArea = "116 m²", buildingArea = "142 m²",
             imageFront = "https://www.golden-city-bekasi.com/app/uploads/sites/26/2023/08/Shapire-depan.webp",
             imagePlan = "https://www.golden-city-bekasi.com/app/uploads/sites/26/2023/08/Shapire-denah.webp",
-            description = "Mewah 5KT 4KM, 2 lantai — untuk keluarga besar."
+            description = "Sapphire 5KT 4KM — mewah 2 lantai.",
+            promo = "DP 10% • Promo Rp20 jt", floors = "2 Lantai"
+        ),
+        Property(
+            id = "allamanda",
+            name = "Allamanda",
+            cluster = Cluster.Gardenia,
+            priceLabel = "Rp899 jt",
+            priceValueMio = 899,
+            bedrooms = 2, bathrooms = 1, carport = 1,
+            landArea = "50 m²", buildingArea = "38 m²",
+            imageFront = "https://goldencitybekasi.net/wp-content/uploads/2026/06/image3-scaled.jpeg",
+            imagePlan = "https://goldencitybekasi.net/wp-content/uploads/2026/06/E-Brosure-Cluster-Gardenia_page-0001.jpg",
+            description = "Gardenia Allamanda — minimalis 1 lantai taman asri.",
+            promo = "DP 10% • Promo Rp20 jt", floors = "1 Lantai"
+        ),
+        Property(
+            id = "akasia",
+            name = "Akasia",
+            cluster = Cluster.Gardenia,
+            priceLabel = "Rp975 jt",
+            priceValueMio = 975,
+            bedrooms = 3, bathrooms = 2, carport = 1,
+            landArea = "60 m²", buildingArea = "48 m²",
+            imageFront = "https://goldencitybekasi.net/wp-content/uploads/2026/07/gardenia.jpeg",
+            imagePlan = "https://goldencitybekasi.net/wp-content/uploads/2026/06/E-Brosure-Cluster-Gardenia_page-0001.jpg",
+            description = "Akasia — 2 lantai, taman depan luas.",
+            promo = "DP 10% • Promo Rp20 jt", floors = "2 Lantai"
+        ),
+        Property(
+            id = "dahlia",
+            name = "Dahlia",
+            cluster = Cluster.Gardenia,
+            priceLabel = "Rp1,12 Miliar",
+            priceValueMio = 1120,
+            bedrooms = 3, bathrooms = 2, carport = 2,
+            landArea = "72 m²", buildingArea = "60 m²",
+            imageFront = "https://goldencitybekasi.net/wp-content/uploads/2026/06/image3-scaled.jpeg",
+            imagePlan = "https://goldencitybekasi.net/wp-content/uploads/2026/06/E-Brosure-Cluster-Gardenia_page-0001.jpg",
+            description = "Dahlia — tipe terluas Gardenia.",
+            promo = "DP 10% • Promo Rp20 jt", floors = "2 Lantai"
         ),
         Property(
             id = "oleander",
             name = "Oleander",
             cluster = Cluster.FlowerGarden,
-            priceLabel = "Rp637 jt",
-            priceValueMio = 637,
-            bedrooms = 2, bathrooms = 2, carport = 2,
-            landArea = "45 m²", buildingArea = "49,5 m²",
-            imageFront = "https://www.golden-city-bekasi.com/app/uploads/sites/26/2023/08/Oleander-depan.webp",
-            imagePlan = "https://www.golden-city-bekasi.com/app/uploads/sites/26/2023/08/Oleander-denah.webp",
-            description = "Compact 2KT 2KM, harga paling terjangkau."
+            priceLabel = "Rp713 jt",
+            priceValueMio = 713,
+            bedrooms = 2, bathrooms = 2, carport = 1,
+            landArea = "45 m²", buildingArea = "36 m²",
+            imageFront = "https://goldencitybekasi.net/wp-content/uploads/2026/06/Marigold.jpg",
+            imagePlan = "https://goldencitybekasi.net/wp-content/uploads/2026/06/5x9-oleander.jpg",
+            description = "Flower Garden Oleander — 1-2 lantai, paling terjangkau.",
+            promo = "DP 10% • Promo Rp20 jt", floors = "1-2 Lantai"
         ),
         Property(
             id = "marigold",
@@ -92,35 +190,90 @@ object PropertyRepository {
             cluster = Cluster.FlowerGarden,
             priceLabel = "Rp829 jt",
             priceValueMio = 829,
-            bedrooms = 3, bathrooms = 2, carport = 2,
-            landArea = "60 m²", buildingArea = "62,5 m²",
-            imageFront = "https://www.golden-city-bekasi.com/app/uploads/sites/26/2023/08/Marigold-depan.webp",
-            imagePlan = "https://www.golden-city-bekasi.com/app/uploads/sites/26/2023/08/Marigold-denah.webp",
-            description = "3KT 2KM flower garden, taman depan asri."
+            bedrooms = 3, bathrooms = 2, carport = 1,
+            landArea = "60 m²", buildingArea = "48 m²",
+            imageFront = "https://goldencitybekasi.net/wp-content/uploads/2026/06/Marigold.jpg",
+            imagePlan = "https://goldencitybekasi.net/wp-content/uploads/2026/06/5x9-oleander.jpg",
+            description = "Marigold — flower garden taman depan asri.",
+            promo = "DP 10% • Promo Rp20 jt", floors = "1-2 Lantai"
         ),
         Property(
-            id = "ruko-standar",
-            name = "Ruko Standar",
+            id = "ruko-diamond-std",
+            name = "Ruko Diamond Standard",
             cluster = Cluster.Rukan,
-            priceLabel = "Rp1,99 Miliar",
-            priceValueMio = 1990,
-            bedrooms = null, bathrooms = 3, carport = null,
-            landArea = "73 m²", buildingArea = "187 m²",
-            imageFront = "https://www.golden-city-bekasi.com/app/uploads/sites/26/2023/08/Ruko-Standart-depan.webp",
-            imagePlan = "https://www.golden-city-bekasi.com/app/uploads/sites/26/2023/08/Ruko-Standart-denah.webp",
-            description = "Rukan 3 lantai, cocok usaha + hunian."
+            priceLabel = "Rp1,69 Miliar",
+            priceValueMio = 1690,
+            bedrooms = null, bathrooms = 2, carport = null,
+            landArea = "70 m²", buildingArea = "210 m²",
+            imageFront = "https://goldencitybekasi.net/wp-content/uploads/2026/07/diamon.jpeg",
+            imagePlan = "https://goldencitybekasi.net/wp-content/uploads/2026/07/Desaintanpajudul1-1.jpeg",
+            description = "Ruko Diamond Blok F1 & F2 — 5×14M 3 Lantai. DP Rp20 jt Cash/KPR — Sewa/Jual.",
+            promo = "DP Rp20 jt • 3 Lantai", floors = "3 Lantai", status = "Sewa / Jual"
         ),
         Property(
-            id = "ruko-hook",
-            name = "Ruko Hook",
+            id = "ruko-diamond-hook",
+            name = "Ruko Diamond Hoek",
             cluster = Cluster.Rukan,
-            priceLabel = "Rp2,55 Miliar",
-            priceValueMio = 2550,
-            bedrooms = null, bathrooms = 3, carport = null,
-            landArea = "92,75 m²", buildingArea = "233,5 m²",
-            imageFront = "https://www.golden-city-bekasi.com/app/uploads/sites/26/2023/08/Ruko-Hook-depan.webp",
-            imagePlan = "https://www.golden-city-bekasi.com/app/uploads/sites/26/2023/08/Ruko-Hook-denah.webp",
-            description = "Hook paling luas, exposure 2 sisi jalan."
+            priceLabel = "Rp2,14 Miliar",
+            priceValueMio = 2140,
+            bedrooms = null, bathrooms = 2, carport = null,
+            landArea = "91 m²", buildingArea = "273 m²",
+            imageFront = "https://goldencitybekasi.net/wp-content/uploads/2026/07/diamon.jpeg",
+            imagePlan = "https://goldencitybekasi.net/wp-content/uploads/2026/07/Desaintanpajudul1-1.jpeg",
+            description = "Ruko Diamond Hoek 6,5×14M — exposure 2 sisi, 3 lantai.",
+            promo = "DP Rp20 jt • 3 Lantai", floors = "3 Lantai", status = "Sewa / Jual"
+        ),
+        Property(
+            id = "ruko-gardenia-std",
+            name = "Ruko Gardenia Standard",
+            cluster = Cluster.Rukan,
+            priceLabel = "Rp1,11 Miliar",
+            priceValueMio = 1110,
+            bedrooms = null, bathrooms = 1, carport = null,
+            landArea = "40 m²", buildingArea = "120 m²",
+            imageFront = "https://goldencitybekasi.net/wp-content/uploads/2026/07/Pi7_image_tool-4.jpeg",
+            imagePlan = "https://goldencitybekasi.net/wp-content/uploads/2026/07/SSDSD.jpeg",
+            description = "Ruko Gardenia 4×10M 3 Lantai — 11 unit terbatas.",
+            promo = "DP Rp20 jt • 3 Lantai", floors = "3 Lantai", status = "Terbatas"
+        ),
+        Property(
+            id = "ruko-gardenia-hook",
+            name = "Ruko Gardenia Hoek",
+            cluster = Cluster.Rukan,
+            priceLabel = "Rp1,39 Miliar",
+            priceValueMio = 1390,
+            bedrooms = null, bathrooms = 1, carport = null,
+            landArea = "55 m²", buildingArea = "165 m²",
+            imageFront = "https://goldencitybekasi.net/wp-content/uploads/2026/07/Pi7_image_tool-4.jpeg",
+            imagePlan = "https://goldencitybekasi.net/wp-content/uploads/2026/07/SSDSD.jpeg",
+            description = "Ruko Gardenia Hoek 5,5×10M — 3 lantai.",
+            promo = "DP Rp20 jt • 3 Lantai", floors = "3 Lantai", status = "Terbatas"
+        ),
+        Property(
+            id = "ruko-greenwood-std",
+            name = "Ruko Greenwood Standard",
+            cluster = Cluster.Rukan,
+            priceLabel = "Rp2,47 Miliar",
+            priceValueMio = 2470,
+            bedrooms = null, bathrooms = 2, carport = null,
+            landArea = "75 m²", buildingArea = "225 m²",
+            imageFront = "https://goldencitybekasi.net/wp-content/uploads/2026/07/greenwoo.jpeg",
+            imagePlan = "https://goldencitybekasi.net/wp-content/uploads/2026/07/greenwo.jpeg",
+            description = "Ruko Greenwood Blok C1,C2,D2 — 5×15M Tenant Starbucks — 3 lantai.",
+            promo = "DP Rp20 jt • 3 Lantai", floors = "3 Lantai", status = "Tersedia"
+        ),
+        Property(
+            id = "ruko-greenwood-hook",
+            name = "Ruko Greenwood Hoek",
+            cluster = Cluster.Rukan,
+            priceLabel = "Rp3,05 Miliar",
+            priceValueMio = 3050,
+            bedrooms = null, bathrooms = 2, carport = null,
+            landArea = "93 m²", buildingArea = "279 m²",
+            imageFront = "https://goldencitybekasi.net/wp-content/uploads/2026/07/greenwoo.jpeg",
+            imagePlan = "https://goldencitybekasi.net/wp-content/uploads/2026/07/greenwo.jpeg",
+            description = "Ruko Greenwood Hoek 6,25×15M — 93m² paling luas.",
+            promo = "DP Rp20 jt • 3 Lantai", floors = "3 Lantai", status = "Tersedia"
         ),
     )
 

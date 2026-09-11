@@ -1,12 +1,16 @@
 package com.enygoldencity.feature.home
 
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.foundation.clickable
+import androidx.compose.ui.draw.alpha
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AutoAwesome
 import androidx.compose.material.icons.filled.Call
@@ -67,7 +71,7 @@ fun HomeScreen(viewModel: HomeViewModel = viewModel { HomeViewModel() }) {
                 modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                TopBar(isCompact = isCompact, maxWidth = contentMaxWidth, padding = horizontalPadding)
+                //TopBar(isCompact = isCompact, maxWidth = contentMaxWidth, padding = horizontalPadding)
                 HeroSection(
                     isCompact = isCompact,
                     maxWidth = contentMaxWidth,
@@ -113,48 +117,74 @@ fun HomeScreen(viewModel: HomeViewModel = viewModel { HomeViewModel() }) {
 
 @Composable
 private fun TopBar(isCompact: Boolean, maxWidth: Dp, padding: Dp) {
-    Surface(color = Color.White, shadowElevation = 1.dp) {
-        Row(
-            modifier = Modifier.fillMaxWidth().widthIn(max = maxWidth).padding(horizontal = padding, vertical = if (isCompact) 10.dp else 14.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                // logo mark
-                Box(
-                    modifier = Modifier.size(if (isCompact) 32.dp else 38.dp).clip(RoundedCornerShape(8.dp))
-                        .background(MaterialTheme.colorScheme.secondary),
-                    contentAlignment = Alignment.Center
+    // Clean elegant floating header — promo pill dihapus sesuai request
+    Column(modifier = Modifier.fillMaxWidth().background(MaterialTheme.colorScheme.background)) {
+        // Main nav — floating card clean (tanpa promo pill atas)
+        Box(modifier = Modifier.fillMaxWidth().padding(horizontal = padding, vertical = 8.dp), contentAlignment = Alignment.Center) {
+            Surface(
+                shape = RoundedCornerShape(16.dp),
+                color = Color.White,
+                shadowElevation = 3.dp,
+                border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.35f)),
+                modifier = Modifier.widthIn(max = maxWidth).fillMaxWidth()
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = if (isCompact) 12.dp else 16.dp, vertical = if (isCompact) 10.dp else 12.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text("GC", color = Color.White, fontWeight = FontWeight.Black, fontSize = if (isCompact) 11.sp else 13.sp)
-                }
-                Column {
-                    Text(
-                        "GOLDEN CITY",
-                        style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Black, letterSpacing = 1.4.sp, fontSize = if (isCompact) 13.sp else 15.sp),
-                        color = MaterialTheme.colorScheme.secondary
-                    )
-                    Text(
-                        "BEKASI • Kak Eny  •  100 HA",
-                        style = MaterialTheme.typography.labelSmall.copy(color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.Bold, fontSize = 10.sp, letterSpacing = 0.4.sp)
-                    )
-                }
-            }
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
-                if (!isCompact) {
-                    TextButton(onClick = { openUrl(buildWhatsAppUrl()) }) {
-                        Text("Lihat Tipe", color = MaterialTheme.colorScheme.secondary, fontWeight = FontWeight.SemiBold, fontSize = 13.sp)
+                    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                        Box(
+                            modifier = Modifier.size(if (isCompact) 34.dp else 40.dp).clip(RoundedCornerShape(10.dp))
+                                .background(Brush.linearGradient(listOf(Color(0xFFFDF6D8), Color(0xFFC9A86A)))),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text("GC", color = Color(0xFF0E1A2B), fontWeight = FontWeight.Black, fontSize = if (isCompact) 12.sp else 13.sp, letterSpacing = 0.6.sp)
+                        }
+                        Column {
+                            Text(
+                                "Golden City",
+                                style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold, letterSpacing = 0.2.sp, fontSize = if (isCompact) 14.sp else 16.sp),
+                                color = Color(0xFF0E1A2B)
+                            )
+                            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                                Text(
+                                    "Bekasi Utara",
+                                    style = MaterialTheme.typography.labelSmall.copy(color = Color(0xFF8A7A5A), fontWeight = FontWeight.Medium, fontSize = 10.sp, letterSpacing = 0.6.sp)
+                                )
+                                Box(Modifier.size(2.dp).clip(RoundedCornerShape(50)).background(Color(0xFFC9A86A)))
+                                Text(
+                                    "Kak Eny",
+                                    style = MaterialTheme.typography.labelSmall.copy(color = Color(0xFF0E1A2B), fontWeight = FontWeight.Bold, fontSize = 10.sp)
+                                )
+                                if (!isCompact) {
+                                    Box(Modifier.size(2.dp).clip(RoundedCornerShape(50)).background(Color(0xFFC9A86A)))
+                                }
+                            }
+                        }
                     }
-                }
-                Button(
-                    onClick = { openUrl(buildWhatsAppUrl()) },
-                    shape = RoundedCornerShape(10.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF25D366)),
-                    contentPadding = PaddingValues(horizontal = if (isCompact) 14.dp else 18.dp, vertical = 8.dp)
-                ) {
-                    Icon(Icons.Filled.Chat, contentDescription = null, modifier = Modifier.size(16.dp), tint = Color.White)
-                    Spacer(Modifier.width(6.dp))
-                    Text(if (isCompact) "WA" else "WhatsApp Kak Eny", fontWeight = FontWeight.Bold, color = Color.White, fontSize = 13.sp)
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
+                        if (!isCompact) {
+                            TextButton(onClick = { openUrl(buildWhatsAppUrl(customMessage = "Halo Kak Eny, mau cek unit ready Golden City")) }) {
+                                Text("Unit Ready", color = Color(0xFF0E1A2B).copy(0.7f), fontWeight = FontWeight.Medium, fontSize = 12.5.sp)
+                            }
+                        }
+                        Surface(
+                            shape = RoundedCornerShape(50),
+                            color = Color(0xFF25D366),
+                            shadowElevation = 1.dp,
+                            modifier = Modifier.clickable { openUrl(buildWhatsAppUrl()) }
+                        ) {
+                            Row(
+                                modifier = Modifier.padding(horizontal = if (isCompact) 14.dp else 16.dp, vertical = 8.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(6.dp)
+                            ) {
+                                Icon(Icons.Filled.Chat, contentDescription = null, modifier = Modifier.size(14.dp), tint = Color.White)
+                                Text(if (isCompact) "Chat Kak Eny" else "Chat Kak Eny", fontWeight = FontWeight.SemiBold, color = Color.White, fontSize = 12.5.sp)
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -163,26 +193,34 @@ private fun TopBar(isCompact: Boolean, maxWidth: Dp, padding: Dp) {
 
 @Composable
 private fun HeroSection(isCompact: Boolean, maxWidth: Dp, padding: Dp, onPrimaryCta: () -> Unit, onImageClick: (String) -> Unit) {
+    // Clean elegant — light cream boutique, single image natural (revert dari split yang aneh)
     Box(
-        modifier = Modifier.fillMaxWidth()
-            .background(Brush.linearGradient(listOf(Color(0xFF0B1B30), Color(0xFF14325A), Color(0xFFC9A86A).copy(alpha = 0.85f))))
+        modifier = Modifier.fillMaxWidth().background(Color(0xFFFEFCF6))
     ) {
+        // subtle gold blur
         Box(
-            modifier = Modifier.widthIn(max = maxWidth).align(Alignment.Center).padding(horizontal = padding, vertical = if (isCompact) 20.dp else 28.dp)
+            modifier = Modifier.size(if (isCompact) 220.dp else 380.dp)
+                .align(Alignment.TopEnd)
+                .offset(x = if (isCompact) 60.dp else 80.dp, y = (-40).dp)
+                .clip(RoundedCornerShape(50))
+                .background(Brush.radialGradient(listOf(Color(0xFFC9A86A).copy(alpha = 0.18f), Color.Transparent)))
+        )
+        Box(
+            modifier = Modifier.widthIn(max = maxWidth).align(Alignment.Center).padding(horizontal = padding, vertical = if (isCompact) 18.dp else 26.dp)
         ) {
             if (isCompact) {
-                Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                Column(verticalArrangement = Arrangement.spacedBy(18.dp)) {
                     HeroText(isCompact = true, onPrimaryCta = onPrimaryCta)
-                    HeroImage(modifier = Modifier.fillMaxWidth().height(220.dp), onImageClick = onImageClick)
+                    HeroSlider(modifier = Modifier.fillMaxWidth().height(260.dp), onImageClick = onImageClick, isCompact = true)
                 }
             } else {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(24.dp),
+                    horizontalArrangement = Arrangement.spacedBy(28.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Box(Modifier.weight(1.05f)) { HeroText(isCompact = false, onPrimaryCta = onPrimaryCta) }
-                    Box(Modifier.weight(0.95f)) { HeroImage(modifier = Modifier.fillMaxWidth().height(320.dp), onImageClick = onImageClick) }
+                    Box(Modifier.weight(1f)) { HeroText(isCompact = false, onPrimaryCta = onPrimaryCta) }
+                    Box(Modifier.weight(1f)) { HeroSlider(modifier = Modifier.fillMaxWidth().height(380.dp), onImageClick = onImageClick, isCompact = false) }
                 }
             }
         }
@@ -191,35 +229,65 @@ private fun HeroSection(isCompact: Boolean, maxWidth: Dp, padding: Dp, onPrimary
 
 @Composable
 private fun HeroText(isCompact: Boolean, onPrimaryCta: () -> Unit) {
-    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-        Surface(shape = RoundedCornerShape(8.dp), color = MaterialTheme.colorScheme.primary) {
+    Column(verticalArrangement = Arrangement.spacedBy(14.dp)) {
+        // Clean labels — soft pill, not rigid block
+        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            Surface(shape = RoundedCornerShape(50), color = Color(0xFFE8F5E9), border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFFC8E6C9))) {
+                Row(modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(5.dp)) {
+                    Box(Modifier.size(6.dp).clip(RoundedCornerShape(50)).background(Color(0xFF2E7D32)))
+                    Text("MODERN GREEN LIVING", style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.SemiBold, fontSize = 9.sp, letterSpacing = 0.7.sp), color = Color(0xFF2E7D32))
+                }
+            }
+            Text("BEKASI UTARA", style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Medium, fontSize = 9.sp, letterSpacing = 0.5.sp, color = Color(0xFF8A7A5A)))
+        }
+        // soft promo pill gold
+        Surface(shape = RoundedCornerShape(50), color = Color(0xFF0E1A2B)) {
             Row(
-                modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp),
+                modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(6.dp)
             ) {
-                Icon(Icons.Filled.AutoAwesome, contentDescription = null, modifier = Modifier.size(12.dp), tint = MaterialTheme.colorScheme.onPrimary)
+                Icon(Icons.Filled.AutoAwesome, contentDescription = null, modifier = Modifier.size(11.dp), tint = Color(0xFFC9A86A))
                 Text(
-                    "HARGA MULAI Rp637 JT  •  KPR SIAP BANTU  •  FREE SURVEY",
-                    style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Black, fontSize = 10.sp, letterSpacing = 0.5.sp),
-                    color = MaterialTheme.colorScheme.onPrimary
+                    "4 Cluster  •  DP 5 jt  •  Booking Fee 5 jt  •  Free BPHTB",
+                    style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Medium, fontSize = 9.5.sp, letterSpacing = 0.4.sp),
+                    color = Color(0xFFFDF6D8)
                 )
             }
         }
+        // Headline — dark elegant, not white on dark
+        Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+            Text(
+                "Golden City",
+                style = MaterialTheme.typography.displaySmall.copy(
+                    fontWeight = FontWeight.Light, fontSize = if (isCompact) 13.sp else 14.sp, letterSpacing = 3.sp, color = Color(0xFF8A7A5A)
+                )
+            )
+            Text(
+                "Perumahan di\nBekasi Utara",
+                style = MaterialTheme.typography.displayMedium.copy(
+                    fontWeight = FontWeight.Black,
+                    lineHeight = if (isCompact) 30.sp else 38.sp,
+                    fontSize = if (isCompact) 28.sp else 36.sp,
+                    letterSpacing = (-1.2).sp
+                ),
+                color = Color(0xFF0E1A2B)
+            )
+            Box(Modifier.width(48.dp).height(3.dp).clip(RoundedCornerShape(50)).background(Color(0xFFC9A86A)))
+        }
         Text(
-            "Hunian Terpadu\nGolden City\nBekasi",
-            style = MaterialTheme.typography.displaySmall.copy(
-                fontWeight = FontWeight.Black,
-                lineHeight = if (isCompact) 28.sp else 38.sp,
-                fontSize = if (isCompact) 26.sp else 34.sp,
-                letterSpacing = (-0.8).sp
-            ),
-            color = Color.White
+            "Kombinasi presisi desain arsitektural, keteduhan cluster hijau & kepraktisan selangkah dari KFC • Starbucks • Pizza Hut. One Gate System, Security 24 Jam — hunian terpadu 100 Ha.",
+            style = MaterialTheme.typography.bodyMedium.copy(color = Color(0xFF5A4A2F).copy(0.85f), lineHeight = 20.sp, fontSize = if (isCompact) 13.sp else 14.sp),
         )
-        Text(
-            "Cluster Diamond • Flower Garden • Rukan Greenwood. Minimalis modern, pondasi plat beton, sanitary TOTO, Wi-Fi & CCTV kawasan. Dekat tol & stasiun.",
-            style = MaterialTheme.typography.bodyMedium.copy(color = Color.White.copy(alpha = 0.88f), lineHeight = 20.sp, fontSize = if (isCompact) 13.sp else 14.sp),
-        )
+        // stats — soft white cards, not dark glass
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            StatCardLight("250+", "Terjual", Icons.Filled.Star, Modifier.weight(1f))
+            StatCardLight("100 Ha", "Kawasan", Icons.Filled.Home, Modifier.weight(1f))
+            StatCardLight("98%", "Puas", Icons.Filled.Favorite, Modifier.weight(1f))
+        }
         Row(
             horizontalArrangement = Arrangement.spacedBy(10.dp),
             verticalAlignment = Alignment.CenterVertically,
@@ -227,48 +295,135 @@ private fun HeroText(isCompact: Boolean, onPrimaryCta: () -> Unit) {
         ) {
             Button(
                 onClick = onPrimaryCta,
-                shape = RoundedCornerShape(12.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
-                contentPadding = PaddingValues(horizontal = 18.dp, vertical = 12.dp)
+                shape = RoundedCornerShape(50),
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF0E1A2B)),
+                contentPadding = PaddingValues(horizontal = 20.dp, vertical = 12.dp),
+                elevation = ButtonDefaults.buttonElevation(defaultElevation = 2.dp)
             ) {
-                Icon(Icons.Filled.Chat, contentDescription = null, modifier = Modifier.size(16.dp), tint = MaterialTheme.colorScheme.onPrimary)
+                Text("Lihat Unit", fontWeight = FontWeight.SemiBold, color = Color.White, fontSize = 13.sp)
                 Spacer(Modifier.width(8.dp))
-                Text("Chat Kak Eny Sekarang", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onPrimary, fontSize = 13.sp)
+                Box(Modifier.size(20.dp).clip(RoundedCornerShape(50)).background(Color.White), contentAlignment = Alignment.Center) {
+                    Text("→", color = Color(0xFF0E1A2B), fontWeight = FontWeight.Bold, fontSize = 11.sp)
+                }
             }
-            if (!isCompact) {
-                Surface(shape = RoundedCornerShape(8.dp), color = Color.White.copy(alpha = 0.12f), border = androidx.compose.foundation.BorderStroke(1.dp, Color.White.copy(0.3f))) {
-                    Text("100 ha • Bekasi Utara", modifier = Modifier.padding(horizontal = 10.dp, vertical = 8.dp), color = Color.White, fontSize = 11.sp, fontWeight = FontWeight.SemiBold)
+            Surface(
+                shape = RoundedCornerShape(50),
+                color = Color.White,
+                border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFF0E1A2B).copy(0.12f)),
+                shadowElevation = 1.dp,
+                modifier = Modifier.clickable { openUrl(buildWhatsAppUrl(customMessage = "Halo Kak Eny, mau cek unit ready Golden City")) }
+            ) {
+                Row(modifier = Modifier.padding(horizontal = 16.dp, vertical = 11.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                    Icon(Icons.Filled.Search, contentDescription = null, modifier = Modifier.size(14.dp), tint = Color(0xFF0E1A2B))
+                    Text("Check Unit Ready", fontWeight = FontWeight.Medium, color = Color(0xFF0E1A2B), fontSize = 12.5.sp)
                 }
             }
         }
-        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-            Icon(Icons.Filled.LocationOn, contentDescription = null, modifier = Modifier.size(12.dp), tint = Color.White.copy(0.7f))
+        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(5.dp), modifier = Modifier.padding(top = 2.dp)) {
+            Icon(Icons.Filled.LocationOn, contentDescription = null, modifier = Modifier.size(12.dp), tint = Color(0xFFC9A86A))
             Text(
-                "Jl. Kaliabang Villa Indah Permai, Teluk Pucung, Bekasi Utara — 12 mnt Stasiun Bekasi, 10 mnt Summarecon Mall",
-                style = MaterialTheme.typography.labelSmall.copy(color = Color.White.copy(0.7f), fontSize = 11.sp, lineHeight = 14.sp)
+                "Jl. Kaliabang Villa Indah Permai, Teluk Pucung — 3 mnt RS Primaya, 10 mnt Summarecon",
+                style = MaterialTheme.typography.labelSmall.copy(color = Color(0xFF8A7A5A), fontSize = 10.5.sp, lineHeight = 13.sp)
             )
         }
     }
 }
 
 @Composable
-private fun HeroImage(modifier: Modifier, onImageClick: (String) -> Unit = {}) {
-    val bannerUrl = proxiedImageUrl("https://www.golden-city-bekasi.com/app/uploads/sites/26/2023/08/Banner-Golden-City-Bekasi1-1.webp", 800)
-    Box(
-        modifier = modifier.clip(RoundedCornerShape(18.dp)).background(Color.White.copy(0.08f))
-            .clickable { onImageClick(proxiedImageUrl("https://www.golden-city-bekasi.com/app/uploads/sites/26/2023/08/Banner-Golden-City-Bekasi1-1.webp", 1200)) }
-    ) {
-        AsyncImage(
-            model = bannerUrl,
-            contentDescription = "Tap untuk perbesar - Golden City Bekasi",
-            modifier = Modifier.fillMaxSize(),
-            contentScale = ContentScale.Crop
+private fun StatCardLight(value: String, label: String, icon: ImageVector, modifier: Modifier = Modifier) {
+    Surface(shape = RoundedCornerShape(12.dp), color = Color.White, shadowElevation = 1.dp, border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFFF0EBDC)), modifier = modifier) {
+        Row(modifier = Modifier.padding(10.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            Box(Modifier.size(28.dp).clip(RoundedCornerShape(8.dp)).background(Color(0xFFFEF3E2)), contentAlignment = Alignment.Center) {
+                Icon(icon, contentDescription = null, modifier = Modifier.size(14.dp), tint = Color(0xFFC9A86A))
+            }
+            Column {
+                Text(value, style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold, fontSize = 13.sp), color = Color(0xFF0E1A2B))
+                Text(label, style = MaterialTheme.typography.labelSmall.copy(fontSize = 9.sp, letterSpacing = 0.4.sp, color = Color(0xFF8A7A5A)))
+            }
+        }
+    }
+}
+
+@Composable
+private fun StatMini(value: String, label: String) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Text(value, style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Black, fontSize = 14.sp), color = Color.White)
+        Text(label, style = MaterialTheme.typography.labelSmall.copy(fontSize = 9.sp, letterSpacing = 0.3.sp, color = Color.White.copy(0.7f)), textAlign = TextAlign.Center)
+    }
+}
+
+@Composable
+private fun HeroSlider(modifier: Modifier, onImageClick: (String) -> Unit, isCompact: Boolean) {
+    // 5 slides — nama + harga start from (pilihan terlaris per cluster)
+    data class Slide(val name: String, val cluster: String, val price: String, val image: String)
+    val slides = remember {
+        listOf(
+            Slide("Cedar", "Greenwood", "Mulai Rp931 jt", "https://goldencitybekasi.net/wp-content/uploads/2026/06/type-cedar-cluster-greenwood-scaled.jpg"),
+            Slide("Jade", "Diamond", "Mulai Rp844 jt", "https://www.golden-city-bekasi.com/app/uploads/sites/26/2023/08/Jade-depan.webp"),
+            Slide("Sapphire", "Diamond", "Mulai Rp1,85 M", "https://www.golden-city-bekasi.com/app/uploads/sites/26/2023/08/Shapire-depan.webp"),
+            Slide("Allamanda", "Gardenia", "Mulai Rp899 jt", "https://goldencitybekasi.net/wp-content/uploads/2026/06/image3-scaled.jpeg"),
+            Slide("Oleander", "Flower Garden", "Mulai Rp713 jt", "https://goldencitybekasi.net/wp-content/uploads/2026/06/Marigold.jpg"),
         )
-        // subtle gradient overlay bottom for text legibility if needed
-        Box(
-            modifier = Modifier.fillMaxWidth().height(60.dp).align(Alignment.BottomCenter)
-                .background(Brush.verticalGradient(listOf(Color.Transparent, Color.Black.copy(0.25f))))
-        )
+    }
+    var index by remember { mutableIntStateOf(0) }
+    // autoplay pelan 5.5s biar nggak cepat-cepat
+    LaunchedEffect(index) {
+        kotlinx.coroutines.delay(5500)
+        index = (index + 1) % slides.size
+    }
+    val slide = slides[index]
+    // Card style — rounded, shadow, clean
+    Box(modifier = modifier) {
+        Card(
+            shape = RoundedCornerShape(20.dp),
+            elevation = CardDefaults.cardElevation(defaultElevation = 4.dp, pressedElevation = 8.dp),
+            colors = CardDefaults.cardColors(containerColor = Color.White),
+            modifier = Modifier.fillMaxSize().clickable { onImageClick(proxiedImageUrl(slide.image, 1200)) }
+        ) {
+            Box(Modifier.fillMaxSize()) {
+                // simple fade animasi pas auto slide — Animatable 0→1 tiap ganti slide
+                val imgAlpha = remember(slide) { Animatable(0f) }
+                LaunchedEffect(slide) { imgAlpha.animateTo(1f, tween(500)) }
+                Box(Modifier.fillMaxSize().alpha(imgAlpha.value)) {
+                    AsyncImage(
+                        model = proxiedImageUrl(slide.image, 800),
+                        contentDescription = "${slide.name} — ${slide.price}",
+                        modifier = Modifier.fillMaxSize(),
+                        contentScale = ContentScale.Crop
+                    )
+                }
+                Box(
+                    modifier = Modifier.fillMaxWidth().height(72.dp).align(Alignment.BottomCenter)
+                        .background(Brush.verticalGradient(listOf(Color.Transparent, Color.Black.copy(0.68f))))
+                )
+                val textAlpha = remember(slide) { Animatable(0f) }
+                LaunchedEffect(slide) { kotlinx.coroutines.delay(80); textAlpha.animateTo(1f, tween(400)) }
+                Column(
+                    modifier = Modifier.align(Alignment.BottomStart).padding(14.dp).alpha(textAlpha.value),
+                    verticalArrangement = Arrangement.spacedBy(2.dp)
+                ) {
+                    Surface(shape = RoundedCornerShape(6.dp), color = Color.White.copy(0.92f)) {
+                        Text(slide.cluster.uppercase(), modifier = Modifier.padding(horizontal = 7.dp, vertical = 3.dp), style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Black, fontSize = 8.5.sp, letterSpacing = 0.6.sp), color = Color(0xFF0E1A2B))
+                    }
+                    Text(slide.name, style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Black, fontSize = 16.sp, color = Color.White))
+                    Text(slide.price, style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold, fontSize = 11.sp, color = Color(0xFFFDF6D8)))
+                }
+                // dots only (arrow dihapus)
+                Row(
+                    modifier = Modifier.align(Alignment.BottomEnd).padding(12.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    slides.forEachIndexed { i, _ ->
+                        val isActive = i == index
+                        Box(
+                        Modifier.size(if (isActive) 16.dp else 6.dp, 6.dp).clip(RoundedCornerShape(50))
+                            .background(if (isActive) Color.White else Color.White.copy(0.45f))
+                    )
+                }
+                }
+            }
+        }
     }
 }
 
@@ -561,12 +716,19 @@ private fun KelebihanCard(item: KelebihanItem, modifier: Modifier = Modifier) {
 
 @Composable
 private fun FacilitiesSection(isCompact: Boolean, maxWidth: Dp, padding: Dp) {
+    data class Facility(val title: String, val subtitle: String, val image: String)
+    val facilities = listOf(
+        Facility("Private Swimming Pool", "Dalam Kawasan", "https://goldencitybekasi.net/wp-content/uploads/2025/03/2.png"),
+        Facility("Community Garden & Jogging Track", "Outdoor", "https://goldencitybekasi.net/wp-content/uploads/2025/03/1.png"),
+        Facility("One Gate System", "Security 24 Jam", "https://goldencitybekasi.net/wp-content/uploads/2025/03/4.png"),
+        Facility("Sports Club", "Fitness Dalam Kawasan", "https://goldencitybekasi.net/wp-content/uploads/2025/03/3.png"),
+    )
     Box(
         modifier = Modifier.fillMaxWidth().background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.45f))
     ) {
         Column(
             modifier = Modifier.widthIn(max = maxWidth).align(Alignment.Center).padding(horizontal = padding, vertical = 22.dp),
-            verticalArrangement = Arrangement.spacedBy(14.dp)
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
                 Column {
@@ -587,20 +749,42 @@ private fun FacilitiesSection(isCompact: Boolean, maxWidth: Dp, padding: Dp) {
                 }
             }
 
-            // facilities chips - wrap on compact using Flow-like column of rows
-            if (isCompact) {
-                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.horizontalScroll(rememberScrollState())) {
-                        listOf("Club House", "Gym", "Jogging Track", "Kolam Renang", "Playground").forEach { FacilityChip(it) }
-                    }
-                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.horizontalScroll(rememberScrollState())) {
-                        listOf("Restaurant", "Taman", "Security 24 Jam", "CCTV Kawasan", "Wi-Fi Area").forEach { FacilityChip(it) }
+            // Facilities grid with visuals — 2x2 compact, 4 col desktop
+            val rows = if (isCompact) facilities.chunked(2) else listOf(facilities)
+            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                rows.forEach { row ->
+                    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                        row.forEach { f ->
+                            Surface(
+                                shape = RoundedCornerShape(16.dp),
+                                color = Color.White,
+                                shadowElevation = 1.dp,
+                                border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(0.4f)),
+                                modifier = Modifier.weight(1f)
+                            ) {
+                                Column {
+                                    AsyncImage(
+                                        model = proxiedImageUrl(f.image, 400),
+                                        contentDescription = f.title,
+                                        modifier = Modifier.fillMaxWidth().height(120.dp).clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)),
+                                        contentScale = ContentScale.Crop
+                                    )
+                                    Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                                        Text(f.subtitle.uppercase(), style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold, letterSpacing = 0.6.sp, fontSize = 9.sp, color = MaterialTheme.colorScheme.primary))
+                                        Text(f.title, style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold, fontSize = 13.sp), color = MaterialTheme.colorScheme.secondary, maxLines = 2)
+                                    }
+                                }
+                            }
+                        }
+                        if (row.size < (if (isCompact) 2 else 4)) {
+                            repeat((if (isCompact) 2 else 4) - row.size) { Spacer(Modifier.weight(1f)) }
+                        }
                     }
                 }
-            } else {
-                Row(horizontalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.horizontalScroll(rememberScrollState())) {
-                    listOf("Club House", "Gym", "Jogging Track", "Kolam Renang", "Playground", "Restaurant", "Taman", "Security 24 Jam", "CCTV Kawasan", "Wi-Fi Area").forEach { FacilityChip(it) }
-                }
+            }
+            // chips tambahan
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.horizontalScroll(rememberScrollState())) {
+                listOf("Club House", "Playground", "Restaurant", "Taman", "Wi-Fi Area", "CCTV Kawasan").forEach { FacilityChip(it) }
             }
 
             Surface(

@@ -39,7 +39,6 @@ fun PropertyCard(
         border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
     ) {
         Column {
-            // Image with badges
             Box(
                 modifier = Modifier.fillMaxWidth()
                     .height(if (compact) 200.dp else 230.dp)
@@ -52,7 +51,6 @@ fun PropertyCard(
                     modifier = Modifier.fillMaxSize(),
                     contentScale = ContentScale.Crop
                 )
-                // zoom hint icon bottom-end
                 Surface(
                     modifier = Modifier.align(Alignment.BottomEnd).padding(10.dp),
                     shape = RoundedCornerShape(8.dp),
@@ -63,16 +61,11 @@ fun PropertyCard(
                         Text("Tap zoom", style = MaterialTheme.typography.labelSmall.copy(fontSize = 10.sp, fontWeight = FontWeight.Bold), color = Color.White)
                     }
                 }
-                // top row badges
                 Row(
                     modifier = Modifier.fillMaxWidth().padding(12.dp).align(Alignment.TopStart),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Surface(
-                        shape = RoundedCornerShape(8.dp),
-                        color = MaterialTheme.colorScheme.secondary,
-                        shadowElevation = 2.dp
-                    ) {
+                    Surface(shape = RoundedCornerShape(8.dp), color = MaterialTheme.colorScheme.secondary, shadowElevation = 2.dp) {
                         Text(
                             text = property.cluster.displayName.uppercase(),
                             modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp),
@@ -80,11 +73,7 @@ fun PropertyCard(
                             color = MaterialTheme.colorScheme.onSecondary
                         )
                     }
-                    Surface(
-                        shape = RoundedCornerShape(50),
-                        color = MaterialTheme.colorScheme.surface.copy(alpha = 0.96f),
-                        shadowElevation = 2.dp
-                    ) {
+                    Surface(shape = RoundedCornerShape(50), color = MaterialTheme.colorScheme.surface.copy(alpha = 0.96f), shadowElevation = 2.dp) {
                         Text(
                             text = property.priceLabel,
                             modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
@@ -99,7 +88,6 @@ fun PropertyCard(
                 modifier = Modifier.padding(18.dp),
                 verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                // title + description
                 Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                     Text(
                         text = property.name,
@@ -116,8 +104,6 @@ fun PropertyCard(
                         overflow = TextOverflow.Ellipsis
                     )
                 }
-
-                // specs - wrap
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(6.dp)
@@ -127,8 +113,6 @@ fun PropertyCard(
                     SpecPill("LT ${property.landArea}", compact)
                     SpecPill("LB ${property.buildingArea}", compact)
                 }
-
-                // denah card
                 Surface(
                     shape = RoundedCornerShape(12.dp),
                     color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f),
@@ -167,8 +151,6 @@ fun PropertyCard(
                         }
                     }
                 }
-
-                // CTA
                 Button(
                     onClick = onWhatsAppClick,
                     modifier = Modifier.fillMaxWidth().height(44.dp),

@@ -24,7 +24,7 @@ import com.enygoldencity.data.Property
 import com.enygoldencity.util.proxiedImageUrl
 import org.jetbrains.compose.resources.painterResource
 import enygoldencity.shared.generated.resources.Res
-import enygoldencity.shared.generated.resources.eny_profile
+import enygoldencity.shared.generated.resources.img_place_holder
 
 @Composable
 fun PropertyCard(
@@ -53,7 +53,7 @@ fun PropertyCard(
                     contentDescription = "Tap untuk perbesar - ${property.name}",
                     modifier = Modifier.fillMaxSize(),
                     contentScale = ContentScale.Crop,
-                    placeholder = painterResource(Res.drawable.eny_profile)
+                    placeholder = painterResource(Res.drawable.img_place_holder)
                 )
                 Surface(
                     modifier = Modifier.align(Alignment.BottomEnd).padding(10.dp),
@@ -136,7 +136,7 @@ fun PropertyCard(
                                 .background(MaterialTheme.colorScheme.surface)
                                 .border(1.dp, MaterialTheme.colorScheme.outlineVariant, RoundedCornerShape(8.dp)),
                             contentScale = ContentScale.Crop,
-                            placeholder = painterResource(Res.drawable.eny_profile)
+                            placeholder = painterResource(Res.drawable.img_place_holder)
                         )
                         Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
                             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {

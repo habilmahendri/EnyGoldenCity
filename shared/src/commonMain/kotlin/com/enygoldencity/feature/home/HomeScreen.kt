@@ -17,6 +17,7 @@ import androidx.compose.ui.draw.alpha
 import org.jetbrains.compose.resources.painterResource
 import enygoldencity.shared.generated.resources.Res
 import enygoldencity.shared.generated.resources.eny_profile
+import enygoldencity.shared.generated.resources.img_place_holder
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBalance
 import androidx.compose.material.icons.filled.AutoAwesome
@@ -719,7 +720,7 @@ private fun HeroSlider(modifier: Modifier, onImageClick: (String) -> Unit, isCom
                         contentDescription = "${slide.name} — ${slide.price}",
                         modifier = Modifier.fillMaxSize(),
                         contentScale = ContentScale.Crop,
-                        placeholder = painterResource(Res.drawable.eny_profile)
+                        placeholder = painterResource(Res.drawable.img_place_holder)
                     )
                 }
                 Box(
@@ -1391,7 +1392,7 @@ private fun FacilitiesSection(isCompact: Boolean, maxWidth: Dp, padding: Dp) {
                                             )
                                         ),
                                         contentScale = ContentScale.Crop,
-                                        placeholder = painterResource(Res.drawable.eny_profile)
+                                        placeholder = painterResource(Res.drawable.img_place_holder)
                                     )
                                     Column(
                                         modifier = Modifier.padding(12.dp),
@@ -1574,7 +1575,7 @@ AsyncImage(
                         )
                     },
                     contentScale = ContentScale.Crop,
-                    placeholder = painterResource(Res.drawable.eny_profile)
+                    placeholder = painterResource(Res.drawable.img_place_holder)
                 )
                 }
             } else {
@@ -1637,7 +1638,7 @@ AsyncImage(
                             )
                         },
                         contentScale = ContentScale.Crop,
-                        placeholder = painterResource(Res.drawable.eny_profile)
+                        placeholder = painterResource(Res.drawable.img_place_holder)
                     )
                 }
             }
@@ -2304,7 +2305,7 @@ private fun MapSection(isCompact: Boolean, maxWidth: Dp, padding: Dp, onImageCli
             }
             Surface(shape = RoundedCornerShape(16.dp), color = Color.White, shadowElevation = if (isCompact) 1.dp else 2.dp, border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFFF0EBDC)), modifier = Modifier.fillMaxWidth().clickable { openUrl("https://www.google.com/maps/search/?api=1&query=Golden+City+Bekasi+Kaliabang") }) {
                 Box(modifier = Modifier.fillMaxWidth().height(if (isCompact) 220.dp else 280.dp)) {
-                    AsyncImage(model = proxiedImageUrl(mapImage, width = if (isCompact) 400 else 600, quality = 70), contentDescription = "Peta Golden City", modifier = Modifier.fillMaxSize(), contentScale = ContentScale.Crop, placeholder = painterResource(Res.drawable.eny_profile))
+                    AsyncImage(model = proxiedImageUrl(mapImage, width = if (isCompact) 400 else 600, quality = 70), contentDescription = "Peta Golden City", modifier = Modifier.fillMaxSize(), contentScale = ContentScale.Crop, placeholder = painterResource(Res.drawable.img_place_holder))
                     Surface(modifier = Modifier.align(Alignment.Center), shape = RoundedCornerShape(50), color = Color.White, shadowElevation = if (isCompact) 1.dp else 2.dp) {
                         Row(modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                             Icon(Icons.Filled.LocationOn, contentDescription = null, modifier = Modifier.size(16.dp), tint = Color(0xFFD32F2F))
@@ -2339,14 +2340,14 @@ private fun BankSection(isCompact: Boolean, maxWidth: Dp, padding: Dp) {
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 Surface(shape = RoundedCornerShape(16.dp), color = Color.White, shadowElevation = if (isCompact) 1.dp else 1.dp, border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFFF0EBDC)), modifier = Modifier.weight(1f)) {
                     Column(modifier = Modifier.padding(14.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                        AsyncImage(model = proxiedImageUrl("https://goldencitybekasi.net/wp-content/uploads/2026/08/65e4402c20cbf.jpeg", width = if (isCompact) 300 else 400, quality = 70), contentDescription = "Bank BTN", modifier = Modifier.height(48.dp).fillMaxWidth(), contentScale = ContentScale.Fit, placeholder = painterResource(Res.drawable.eny_profile))
+                        AsyncImage(model = proxiedImageUrl("https://goldencitybekasi.net/wp-content/uploads/2026/08/65e4402c20cbf.jpeg", width = if (isCompact) 300 else 400, quality = 70), contentDescription = "Bank BTN", modifier = Modifier.height(48.dp).fillMaxWidth(), contentScale = ContentScale.Fit, placeholder = painterResource(Res.drawable.img_place_holder))
                         Text("Bank BTN", style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold, fontSize = 12.sp), color = Color(0xFF0E1A2B))
                         Text("KPR bunga kompetitif, proses mudah", style = MaterialTheme.typography.labelSmall.copy(fontSize = 10.5.sp, color = Color(0xFF5A4A2F), textAlign = TextAlign.Center))
                     }
                 }
                 Surface(shape = RoundedCornerShape(16.dp), color = Color.White, shadowElevation = if (isCompact) 1.dp else 1.dp, border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFFF0EBDC)), modifier = Modifier.weight(1f)) {
                     Column(modifier = Modifier.padding(14.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                        AsyncImage(model = proxiedImageUrl("https://goldencitybekasi.net/wp-content/uploads/2026/08/images-5.jpg", width = if (isCompact) 300 else 400, quality = 70), contentDescription = "Bank Permata", modifier = Modifier.height(48.dp).fillMaxWidth(), contentScale = ContentScale.Fit, placeholder = painterResource(Res.drawable.eny_profile))
+                        AsyncImage(model = proxiedImageUrl("https://goldencitybekasi.net/wp-content/uploads/2026/08/images-5.jpg", width = if (isCompact) 300 else 400, quality = 70), contentDescription = "Bank Permata", modifier = Modifier.height(48.dp).fillMaxWidth(), contentScale = ContentScale.Fit, placeholder = painterResource(Res.drawable.img_place_holder))
                         Text("Bank Permata", style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold, fontSize = 12.sp), color = Color(0xFF0E1A2B))
                         Text("Skema fleksibel, konsultasi gratis", style = MaterialTheme.typography.labelSmall.copy(fontSize = 10.5.sp, color = Color(0xFF5A4A2F), textAlign = TextAlign.Center))
                     }

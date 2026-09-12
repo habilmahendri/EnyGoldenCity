@@ -1,5 +1,6 @@
 package com.enygoldencity.feature.home
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
@@ -7,6 +8,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -52,6 +54,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -69,90 +72,155 @@ fun HomeScreen(viewModel: HomeViewModel = viewModel { HomeViewModel() }) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     var lightboxUrl by remember { mutableStateOf<String?>(null) }
 
-    BoxWithConstraints(
-        modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)
+Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
     ) {
-        val maxW = maxWidth
-        val isCompact = maxW < 720.dp
-        val isMedium = maxW < 1020.dp
-        val horizontalPadding: Dp = when {
-            isCompact -> 16.dp
-            isMedium -> 24.dp
-            else -> 32.dp
-        }
-        val contentMaxWidth = 1120.dp
+        BoxWithConstraints {
+            val maxW = maxWidth
+            val isCompact = maxWidth < 720.dp
+            val isMedium = maxW < 1020.dp
+            val horizontalPadding: Dp = when {
+                isCompact -> 16.dp
+                isMedium -> 24.dp
+                else -> 32.dp
+            }
+            val contentMaxWidth = 1120.dp
 
-        Box(modifier = Modifier.fillMaxSize()) {
-            Column(
-                modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()),
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                contentPadding = PaddingValues(0.dp),
+                verticalArrangement = Arrangement.spacedBy(0.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                //TopBar(isCompact = isCompact, maxWidth = contentMaxWidth, padding = horizontalPadding)
-                HeroSection(
-                    isCompact = isCompact,
-                    maxWidth = contentMaxWidth,
-                    padding = horizontalPadding,
-                    onPrimaryCta = { openUrl(buildWhatsAppUrl()) },
-                    onImageClick = { lightboxUrl = it }
-                )
-                // centered content
-                Column(
-                    modifier = Modifier.widthIn(max = contentMaxWidth).fillMaxWidth()
-                        .padding(horizontal = horizontalPadding),
-                    verticalArrangement = Arrangement.spacedBy(0.dp)
-                ) {
-                    Spacer(Modifier.height(20.dp))
-                    FilterSection(
-                        state = state,
-                        onEvent = viewModel::onEvent,
-                        isCompact = isCompact
-                    )
-                    Spacer(Modifier.height(12.dp))
-                    PropertyGrid(
-                        state = state,
+                // HeroSection - first item
+                item {
+                    HeroSection(
                         isCompact = isCompact,
-                        isMedium = isMedium,
-                        onImageClick = { lightboxUrl = it })
-                    Spacer(Modifier.height(8.dp))
+                        maxWidth = contentMaxWidth,
+                        padding = horizontalPadding,
+                        onPrimaryCta = { openUrl(buildWhatsAppUrl()) },
+                        onImageClick = { lightboxUrl = it }
+                    )
                 }
-                KelebihanSection(
-                    isCompact = isCompact,
-                    maxWidth = contentMaxWidth,
-                    padding = horizontalPadding
-                )
-                FacilitiesSection(
-                    isCompact = isCompact,
-                    maxWidth = contentMaxWidth,
-                    padding = horizontalPadding
-                )
-                LocationSection(
-                    isCompact = isCompact,
-                    maxWidth = contentMaxWidth,
-                    padding = horizontalPadding,
-                    onWhatsAppClick = { openUrl(buildWhatsAppUrl()) },
-                    onImageClick = { lightboxUrl = it }
-                )
-                TestimoniSection(
-                    isCompact = isCompact,
-                    maxWidth = contentMaxWidth,
-                    padding = horizontalPadding
-                )
-                AboutEnySection(
-                    isCompact = isCompact,
-                    maxWidth = contentMaxWidth,
-                    padding = horizontalPadding
-                )
-                PromoSection(isCompact = isCompact, maxWidth = contentMaxWidth, padding = horizontalPadding)
-                MapSection(isCompact = isCompact, maxWidth = contentMaxWidth, padding = horizontalPadding, onImageClick = { lightboxUrl = it })
-                BankSection(isCompact = isCompact, maxWidth = contentMaxWidth, padding = horizontalPadding)
-                LegalitasSection(isCompact = isCompact, maxWidth = contentMaxWidth, padding = horizontalPadding)
-                FaqSection(isCompact = isCompact, maxWidth = contentMaxWidth, padding = horizontalPadding)
-                Footer(
-                    isCompact = isCompact,
-                    maxWidth = contentMaxWidth,
-                    padding = horizontalPadding
-                )
-                Spacer(Modifier.height(88.dp))
+                // FilterSection
+                item {
+                    Column(
+                        modifier = Modifier.widthIn(max = contentMaxWidth).fillMaxWidth()
+                            .padding(horizontal = horizontalPadding),
+                        verticalArrangement = Arrangement.spacedBy(0.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Spacer(Modifier.height(20.dp))
+                        FilterSection(
+                            state = state,
+                            onEvent = viewModel::onEvent,
+                            isCompact = isCompact
+                        )
+                        Spacer(Modifier.height(12.dp))
+                    }
+                }
+                // PropertyGrid — centered sama kayak Filter (widthIn + padding)
+                item {
+                    Column(
+                        modifier = Modifier.widthIn(max = contentMaxWidth).fillMaxWidth()
+                            .padding(horizontal = horizontalPadding),
+                        verticalArrangement = Arrangement.spacedBy(0.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        PropertyGrid(
+                            state = state,
+                            isCompact = isCompact,
+                            isMedium = isMedium,
+                            onImageClick = { lightboxUrl = it },
+                            onEvent = viewModel::onEvent
+                        )
+                        Spacer(Modifier.height(8.dp))
+                    }
+                }
+                // KelebihanSection
+                item {
+                    KelebihanSection(
+                        isCompact = isCompact,
+                        maxWidth = contentMaxWidth,
+                        padding = horizontalPadding
+                    )
+                }
+                // FacilitiesSection
+                item {
+                    FacilitiesSection(
+                        isCompact = isCompact,
+                        maxWidth = contentMaxWidth,
+                        padding = horizontalPadding
+                    )
+                }
+                // LocationSection
+                item {
+                    LocationSection(
+                        isCompact = isCompact,
+                        maxWidth = contentMaxWidth,
+                        padding = horizontalPadding,
+                        onWhatsAppClick = { openUrl(buildWhatsAppUrl()) },
+                        onImageClick = { lightboxUrl = it }
+                    )
+                }
+                // TestimoniSection
+                item {
+                    TestimoniSection(
+                        isCompact = isCompact,
+                        maxWidth = contentMaxWidth,
+                        padding = horizontalPadding
+                    )
+                }
+                // AboutEnySection
+                item {
+                    AboutEnySection(
+                        isCompact = isCompact,
+                        maxWidth = contentMaxWidth,
+                        padding = horizontalPadding
+                    )
+                }
+                // PromoSection
+                item {
+                    PromoSection(isCompact = isCompact, maxWidth = contentMaxWidth, padding = horizontalPadding)
+                }
+                // MapSection
+                item {
+                    MapSection(
+                        isCompact = isCompact,
+                        maxWidth = contentMaxWidth,
+                        padding = horizontalPadding,
+                        onImageClick = { lightboxUrl = it }
+                    )
+                }
+                // BankSection
+                item {
+                    BankSection(
+                        isCompact = isCompact,
+                        maxWidth = contentMaxWidth,
+                        padding = horizontalPadding
+                    )
+                }
+                // LegalitasSection
+                item {
+                    LegalitasSection(isCompact = isCompact, maxWidth = contentMaxWidth, padding = horizontalPadding)
+                }
+                // FaqSection
+                item {
+                    FaqSection(isCompact = isCompact, maxWidth = contentMaxWidth, padding = horizontalPadding)
+                }
+                // Footer
+                item {
+                    Footer(
+                        isCompact = isCompact,
+                        maxWidth = contentMaxWidth,
+                        padding = horizontalPadding
+                    )
+                }
+item {
+                    Spacer(Modifier.height(88.dp))
+                }
             }
             FloatingWhatsApp(
                 modifier = Modifier.align(Alignment.BottomEnd)
@@ -636,14 +704,10 @@ private fun HeroSlider(modifier: Modifier, onImageClick: (String) -> Unit, isCom
     // Card style — rounded, shadow, clean
     Box(modifier = modifier) {
         Card(
-            shape = RoundedCornerShape(20.dp),
-            elevation = CardDefaults.cardElevation(
-                defaultElevation = 4.dp,
-                pressedElevation = 8.dp
-            ),
+            shape = RoundedCornerShape(16.dp),
+            elevation = CardDefaults.cardElevation(defaultElevation = if (isCompact) 1.dp else 2.dp, pressedElevation = if (isCompact) 3.dp else 4.dp),
             colors = CardDefaults.cardColors(containerColor = Color.White),
-            modifier = Modifier.fillMaxSize()
-                .clickable { onImageClick(proxiedImageUrl(slide.image, 1200)) }
+            modifier = Modifier.fillMaxSize().clickable { onImageClick(proxiedImageUrl(slide.image, 1200)) }
         ) {
             Box(Modifier.fillMaxSize()) {
                 // simple fade animasi pas auto slide — Animatable 0→1 tiap ganti slide
@@ -651,10 +715,11 @@ private fun HeroSlider(modifier: Modifier, onImageClick: (String) -> Unit, isCom
                 LaunchedEffect(slide) { imgAlpha.animateTo(1f, tween(500)) }
                 Box(Modifier.fillMaxSize().alpha(imgAlpha.value)) {
                     AsyncImage(
-                        model = proxiedImageUrl(slide.image, 800),
+                        model = proxiedImageUrl(slide.image, width = if (isCompact) 400 else 600, quality = 75),
                         contentDescription = "${slide.name} — ${slide.price}",
                         modifier = Modifier.fillMaxSize(),
-                        contentScale = ContentScale.Crop
+                        contentScale = ContentScale.Crop,
+                        placeholder = painterResource(Res.drawable.eny_profile)
                     )
                 }
                 Box(
@@ -732,8 +797,23 @@ private fun HeroSlider(modifier: Modifier, onImageClick: (String) -> Unit, isCom
 @Composable
 private fun FilterSection(state: HomeUiState, onEvent: (HomeEvent) -> Unit, isCompact: Boolean) {
     var search by remember { mutableStateOf(state.searchQuery) }
+    var debouncedSearch by remember { mutableStateOf(state.searchQuery) }
+
+    LaunchedEffect(search) {
+        // Debounce 300ms
+        kotlinx.coroutines.delay(300)
+        debouncedSearch = search
+    }
+
     LaunchedEffect(state.searchQuery) {
         if (state.searchQuery != search) search = state.searchQuery
+    }
+
+    // Trigger search when debounced value changes
+    LaunchedEffect(debouncedSearch) {
+        if (debouncedSearch != state.searchQuery) {
+            onEvent(HomeEvent.SearchQueryChanged(debouncedSearch))
+        }
     }
 
     Surface(
@@ -865,9 +945,10 @@ private fun PropertyGrid(
     state: HomeUiState,
     isCompact: Boolean,
     isMedium: Boolean,
-    onImageClick: (String) -> Unit
+    onImageClick: (String) -> Unit,
+    onEvent: (HomeEvent) -> Unit
 ) {
-    if (state.filteredProperties.isEmpty()) {
+    if (state.displayedProperties.isEmpty()) {
         Surface(
             shape = RoundedCornerShape(16.dp),
             color = Color.White,
@@ -923,8 +1004,9 @@ private fun PropertyGrid(
         isMedium -> 2
         else -> 3
     }
-    val chunked = state.filteredProperties.chunked(columns)
 
+    val displayed = state.displayedProperties
+    val chunked = displayed.chunked(columns)
     Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
         chunked.forEach { row ->
             Row(
@@ -940,10 +1022,50 @@ private fun PropertyGrid(
                         compact = isCompact
                     )
                 }
-                // fill remaining space if row not full
                 repeat(columns - row.size) {
                     Spacer(Modifier.weight(1f))
                 }
+            }
+        }
+        // Paging info + controls — 5 per halaman
+        Column(
+            modifier = Modifier.fillMaxWidth().padding(top = 4.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            Text(
+                "Menampilkan ${state.displayedProperties.size} dari ${state.filteredProperties.size} unit",
+                style = MaterialTheme.typography.labelSmall.copy(fontSize = 11.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            )
+            if (state.hasMore) {
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Button(
+                        onClick = { onEvent(HomeEvent.LoadMore) },
+                        shape = RoundedCornerShape(50),
+                        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary),
+                        contentPadding = PaddingValues(horizontal = 18.dp, vertical = 10.dp)
+                    ) {
+                        Icon(Icons.Filled.ExpandMore, contentDescription = null, modifier = Modifier.size(16.dp), tint = Color.White)
+                        Spacer(Modifier.width(6.dp))
+                        Text("Muat 5 Lainnya (${state.remaining} lagi)", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 12.sp)
+                    }
+                    OutlinedButton(
+                        onClick = { onEvent(HomeEvent.ShowAll) },
+                        shape = RoundedCornerShape(50),
+                        border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.secondary.copy(0.3f)),
+                        contentPadding = PaddingValues(horizontal = 14.dp, vertical = 10.dp)
+                    ) {
+                        Text("Lihat Semua (${state.filteredProperties.size})", color = MaterialTheme.colorScheme.secondary, fontWeight = FontWeight.SemiBold, fontSize = 12.sp)
+                    }
+                }
+            } else if (state.filteredProperties.size > state.pageSize) {
+                Text(
+                    "Sudah menampilkan semua ${state.filteredProperties.size} unit",
+                    style = MaterialTheme.typography.labelSmall.copy(fontSize = 11.sp, color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.Medium)
+                )
             }
         }
     }
@@ -1260,7 +1382,7 @@ private fun FacilitiesSection(isCompact: Boolean, maxWidth: Dp, padding: Dp) {
                             ) {
                                 Column {
                                     AsyncImage(
-                                        model = proxiedImageUrl(f.image, 400),
+                                        model = proxiedImageUrl(f.image, width = if (isCompact) 300 else 400, quality = 70),
                                         contentDescription = f.title,
                                         modifier = Modifier.fillMaxWidth().height(120.dp).clip(
                                             RoundedCornerShape(
@@ -1268,7 +1390,8 @@ private fun FacilitiesSection(isCompact: Boolean, maxWidth: Dp, padding: Dp) {
                                                 topEnd = 16.dp
                                             )
                                         ),
-                                        contentScale = ContentScale.Crop
+                                        contentScale = ContentScale.Crop,
+                                        placeholder = painterResource(Res.drawable.eny_profile)
                                     )
                                     Column(
                                         modifier = Modifier.padding(12.dp),
@@ -1435,23 +1558,24 @@ private fun LocationSection(
                             )
                         }
                     }
-                    AsyncImage(
+AsyncImage(
                         model = proxiedImageUrl(
                             "https://www.golden-city-bekasi.com/app/uploads/sites/26/2023/08/Main-Entrance.webp",
-                            600
+                            width = if (isCompact) 400 else 600, quality = 70
                         ),
                         contentDescription = "Tap untuk perbesar - Main Entrance",
                         modifier = Modifier.fillMaxWidth().height(200.dp)
                             .clip(RoundedCornerShape(14.dp)).clickable {
-                            onImageClick(
-                                proxiedImageUrl(
-                                    "https://www.golden-city-bekasi.com/app/uploads/sites/26/2023/08/Main-Entrance.webp",
-                                    1200
-                                )
+                        onImageClick(
+                            proxiedImageUrl(
+                                "https://www.golden-city-bekasi.com/app/uploads/sites/26/2023/08/Main-Entrance.webp",
+                                1200
                             )
-                        },
-                        contentScale = ContentScale.Crop
-                    )
+                        )
+                    },
+                    contentScale = ContentScale.Crop,
+                    placeholder = painterResource(Res.drawable.eny_profile)
+                )
                 }
             } else {
                 Row(
@@ -1500,7 +1624,7 @@ private fun LocationSection(
                     AsyncImage(
                         model = proxiedImageUrl(
                             "https://www.golden-city-bekasi.com/app/uploads/sites/26/2023/08/Main-Entrance.webp",
-                            600
+                            width = if (isCompact) 400 else 600, quality = 70
                         ),
                         contentDescription = "Tap untuk perbesar - Main Entrance",
                         modifier = Modifier.weight(0.9f).height(240.dp)
@@ -1512,7 +1636,8 @@ private fun LocationSection(
                                 )
                             )
                         },
-                        contentScale = ContentScale.Crop
+                        contentScale = ContentScale.Crop,
+                        placeholder = painterResource(Res.drawable.eny_profile)
                     )
                 }
             }
@@ -1797,6 +1922,27 @@ private fun TestimoniSection(isCompact: Boolean, maxWidth: Dp, padding: Dp) {
                                 )
                             }
                         }
+                        Button(
+                            onClick = { openUrl("https://www.instagram.com/goldencitybekasi.official/") },
+                            shape = RoundedCornerShape(10.dp),
+                            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFE1306C)),
+                            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+                            modifier = Modifier.wrapContentWidth()
+                        ) {
+                            Icon(
+                                Icons.Filled.Share,
+                                contentDescription = null,
+                                modifier = Modifier.size(14.dp),
+                                tint = Color.White
+                            )
+                            Spacer(Modifier.width(6.dp))
+                            Text(
+                                "Buka Instagram",
+                                color = Color.White,
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 12.sp
+                            )
+                        }
                     }
                 }
             }
@@ -1864,9 +2010,9 @@ private fun AboutEnySection(isCompact: Boolean, maxWidth: Dp, padding: Dp) {
 
             // main card — foto + story
             Surface(
-                shape = RoundedCornerShape(20.dp),
+                shape = RoundedCornerShape(16.dp),
                 color = Color.White,
-                shadowElevation = 3.dp,
+                shadowElevation = if (isCompact) 1.dp else 2.dp,
                 border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFFF0EBDC)),
                 modifier = Modifier.fillMaxWidth()
             ) {
@@ -2156,10 +2302,10 @@ private fun MapSection(isCompact: Boolean, maxWidth: Dp, padding: Dp, onImageCli
                 Text("Peta Lokasi Golden City", style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Black, fontSize = if (isCompact) 18.sp else 22.sp), color = Color(0xFF0E1A2B), textAlign = TextAlign.Center)
                 Text("Jl. Kaliabang Villa Indah Permai, Teluk Pucung, Bekasi Utara — tap peta untuk navigasi", style = MaterialTheme.typography.bodySmall.copy(color = Color(0xFF5A4A2F), textAlign = TextAlign.Center, fontSize = 12.5.sp), modifier = Modifier.widthIn(max = 640.dp))
             }
-            Surface(shape = RoundedCornerShape(16.dp), color = Color.White, shadowElevation = 3.dp, border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFFF0EBDC)), modifier = Modifier.fillMaxWidth().clickable { openUrl("https://www.google.com/maps/search/?api=1&query=Golden+City+Bekasi+Kaliabang") }) {
+            Surface(shape = RoundedCornerShape(16.dp), color = Color.White, shadowElevation = if (isCompact) 1.dp else 2.dp, border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFFF0EBDC)), modifier = Modifier.fillMaxWidth().clickable { openUrl("https://www.google.com/maps/search/?api=1&query=Golden+City+Bekasi+Kaliabang") }) {
                 Box(modifier = Modifier.fillMaxWidth().height(if (isCompact) 220.dp else 280.dp)) {
-                    AsyncImage(model = proxiedImageUrl(mapImage, 800), contentDescription = "Peta Golden City", modifier = Modifier.fillMaxSize(), contentScale = ContentScale.Crop)
-                    Surface(modifier = Modifier.align(Alignment.Center), shape = RoundedCornerShape(50), color = Color.White, shadowElevation = 4.dp) {
+                    AsyncImage(model = proxiedImageUrl(mapImage, width = if (isCompact) 400 else 600, quality = 70), contentDescription = "Peta Golden City", modifier = Modifier.fillMaxSize(), contentScale = ContentScale.Crop, placeholder = painterResource(Res.drawable.eny_profile))
+                    Surface(modifier = Modifier.align(Alignment.Center), shape = RoundedCornerShape(50), color = Color.White, shadowElevation = if (isCompact) 1.dp else 2.dp) {
                         Row(modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                             Icon(Icons.Filled.LocationOn, contentDescription = null, modifier = Modifier.size(16.dp), tint = Color(0xFFD32F2F))
                             Text("Buka di Google Maps", style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold, fontSize = 12.sp), color = Color(0xFF0E1A2B))
@@ -2191,16 +2337,16 @@ private fun BankSection(isCompact: Boolean, maxWidth: Dp, padding: Dp) {
             Text("Mitra Pembiayaan KPR", style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Black, fontSize = if (isCompact) 18.sp else 22.sp), color = Color(0xFF0E1A2B), textAlign = TextAlign.Center)
             Text("Proses didampingi Kak Eny dari berkas sampai akad — aman & transparan", style = MaterialTheme.typography.bodySmall.copy(color = Color(0xFF5A4A2F), textAlign = TextAlign.Center, fontSize = 12.5.sp))
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                Surface(shape = RoundedCornerShape(16.dp), color = Color.White, shadowElevation = 2.dp, border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFFF0EBDC)), modifier = Modifier.weight(1f)) {
+                Surface(shape = RoundedCornerShape(16.dp), color = Color.White, shadowElevation = if (isCompact) 1.dp else 1.dp, border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFFF0EBDC)), modifier = Modifier.weight(1f)) {
                     Column(modifier = Modifier.padding(14.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                        AsyncImage(model = proxiedImageUrl("https://goldencitybekasi.net/wp-content/uploads/2026/08/65e4402c20cbf.jpeg", 400), contentDescription = "Bank BTN", modifier = Modifier.height(48.dp).fillMaxWidth(), contentScale = ContentScale.Fit)
+                        AsyncImage(model = proxiedImageUrl("https://goldencitybekasi.net/wp-content/uploads/2026/08/65e4402c20cbf.jpeg", width = if (isCompact) 300 else 400, quality = 70), contentDescription = "Bank BTN", modifier = Modifier.height(48.dp).fillMaxWidth(), contentScale = ContentScale.Fit, placeholder = painterResource(Res.drawable.eny_profile))
                         Text("Bank BTN", style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold, fontSize = 12.sp), color = Color(0xFF0E1A2B))
                         Text("KPR bunga kompetitif, proses mudah", style = MaterialTheme.typography.labelSmall.copy(fontSize = 10.5.sp, color = Color(0xFF5A4A2F), textAlign = TextAlign.Center))
                     }
                 }
-                Surface(shape = RoundedCornerShape(16.dp), color = Color.White, shadowElevation = 2.dp, border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFFF0EBDC)), modifier = Modifier.weight(1f)) {
+                Surface(shape = RoundedCornerShape(16.dp), color = Color.White, shadowElevation = if (isCompact) 1.dp else 1.dp, border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFFF0EBDC)), modifier = Modifier.weight(1f)) {
                     Column(modifier = Modifier.padding(14.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                        AsyncImage(model = proxiedImageUrl("https://goldencitybekasi.net/wp-content/uploads/2026/08/images-5.jpg", 400), contentDescription = "Bank Permata", modifier = Modifier.height(48.dp).fillMaxWidth(), contentScale = ContentScale.Fit)
+                        AsyncImage(model = proxiedImageUrl("https://goldencitybekasi.net/wp-content/uploads/2026/08/images-5.jpg", width = if (isCompact) 300 else 400, quality = 70), contentDescription = "Bank Permata", modifier = Modifier.height(48.dp).fillMaxWidth(), contentScale = ContentScale.Fit, placeholder = painterResource(Res.drawable.eny_profile))
                         Text("Bank Permata", style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold, fontSize = 12.sp), color = Color(0xFF0E1A2B))
                         Text("Skema fleksibel, konsultasi gratis", style = MaterialTheme.typography.labelSmall.copy(fontSize = 10.5.sp, color = Color(0xFF5A4A2F), textAlign = TextAlign.Center))
                     }
@@ -2281,9 +2427,10 @@ private fun FaqSection(isCompact: Boolean, maxWidth: Dp, padding: Dp) {
                         shape = RoundedCornerShape(12.dp),
                         color = if (expanded) Color(0xFFFDF6FF) else Color.White,
                         border = androidx.compose.foundation.BorderStroke(1.dp, if (expanded) Color(0xFFE9D5FF) else Color(0xFFF0EBDC)),
-                        modifier = Modifier.fillMaxWidth().clickable { expanded = !expanded }
+                        onClick = { expanded = !expanded },
+                        modifier = Modifier.fillMaxWidth()
                     ) {
-                        Column(modifier = Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                        Column(modifier = Modifier.padding(14.dp).animateContentSize(animationSpec = tween(180)), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
                                 Text(q, style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold, fontSize = 12.5.sp), color = Color(0xFF0E1A2B), modifier = Modifier.weight(1f))
                                 Icon(

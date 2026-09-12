@@ -22,6 +22,9 @@ import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import com.enygoldencity.data.Property
 import com.enygoldencity.util.proxiedImageUrl
+import org.jetbrains.compose.resources.painterResource
+import enygoldencity.shared.generated.resources.Res
+import enygoldencity.shared.generated.resources.eny_profile
 
 @Composable
 fun PropertyCard(
@@ -33,8 +36,8 @@ fun PropertyCard(
 ) {
     Card(
         modifier = modifier,
-        shape = RoundedCornerShape(20.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp, pressedElevation = 6.dp),
+        shape = RoundedCornerShape(16.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = if (compact) 1.dp else 2.dp, pressedElevation = if (compact) 3.dp else 4.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
     ) {
@@ -46,10 +49,11 @@ fun PropertyCard(
                     .clickable { onImageClick(proxiedImageUrl(property.imageFront, width = 1200)) }
             ) {
                 AsyncImage(
-                    model = proxiedImageUrl(property.imageFront, width = 640),
+                    model = proxiedImageUrl(property.imageFront, width = if (compact) 400 else 600, quality = 75),
                     contentDescription = "Tap untuk perbesar - ${property.name}",
                     modifier = Modifier.fillMaxSize(),
-                    contentScale = ContentScale.Crop
+                    contentScale = ContentScale.Crop,
+                    placeholder = painterResource(Res.drawable.eny_profile)
                 )
                 Surface(
                     modifier = Modifier.align(Alignment.BottomEnd).padding(10.dp),
@@ -125,13 +129,14 @@ fun PropertyCard(
                         horizontalArrangement = Arrangement.spacedBy(10.dp)
                     ) {
                         AsyncImage(
-                            model = proxiedImageUrl(property.imagePlan, width = 300),
+                            model = proxiedImageUrl(property.imagePlan, width = if (compact) 250 else 300, quality = 70),
                             contentDescription = "Tap untuk perbesar denah ${property.name}",
                             modifier = Modifier.size(if (compact) 52.dp else 60.dp)
                                 .clip(RoundedCornerShape(8.dp))
                                 .background(MaterialTheme.colorScheme.surface)
                                 .border(1.dp, MaterialTheme.colorScheme.outlineVariant, RoundedCornerShape(8.dp)),
-                            contentScale = ContentScale.Crop
+                            contentScale = ContentScale.Crop,
+                            placeholder = painterResource(Res.drawable.eny_profile)
                         )
                         Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
                             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {

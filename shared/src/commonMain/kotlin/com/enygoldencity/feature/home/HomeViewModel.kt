@@ -14,7 +14,8 @@ class HomeViewModel : ViewModel() {
     private val _state = MutableStateFlow(
         HomeUiState(
             allProperties = all,
-            filteredProperties = all
+            filteredProperties = all,
+            displayedProperties = all.take(5)
         )
     )
     val state: StateFlow<HomeUiState> = _state.asStateFlow()
@@ -24,6 +25,8 @@ class HomeViewModel : ViewModel() {
             is HomeEvent.SearchQueryChanged -> applyFilter(search = event.query)
             is HomeEvent.ClusterSelected -> applyFilter(cluster = event.cluster)
             HomeEvent.ToggleSort -> toggleSort()
+            HomeEvent.LoadMore -> loadMore()
+            HomeEvent.ShowAll -> showAll()
         }
     }
 
@@ -48,7 +51,14 @@ class HomeViewModel : ViewModel() {
             filtered = if (cur.sortByPriceAsc) filtered.sortedBy { it.priceValueMio }
             else filtered.sortedByDescending { it.priceValueMio }
 
-            cur.copy(searchQuery = newSearch, selectedCluster = newCluster, filteredProperties = filtered)
+            val displayed = filtered.take(cur.pageSize * 1)
+            cur.copy(
+                searchQuery = newSearch,
+                selectedCluster = newCluster,
+                filteredProperties = filtered,
+                currentPage = 1,
+                displayedProperties = displayed
+            )
         }
     }
 
@@ -56,7 +66,22 @@ class HomeViewModel : ViewModel() {
         _state.update { cur ->
             val sorted = if (cur.sortByPriceAsc) cur.filteredProperties.sortedByDescending { it.priceValueMio }
             else cur.filteredProperties.sortedBy { it.priceValueMio }
-            cur.copy(sortByPriceAsc = !cur.sortByPriceAsc, filteredProperties = sorted)
+            val displayed = sorted.take(cur.pageSize * cur.currentPage)
+            cur.copy(sortByPriceAsc = !cur.sortByPriceAsc, filteredProperties = sorted, displayedProperties = displayed)
+        }
+    }
+
+    private fun loadMore() {
+        _state.update { cur ->
+            val nextPage = cur.currentPage + 1
+            val displayed = cur.filteredProperties.take(nextPage * cur.pageSize)
+            cur.copy(currentPage = nextPage, displayedProperties = displayed)
+        }
+    }
+
+    private fun showAll() {
+        _state.update { cur ->
+            cur.copy(displayedProperties = cur.filteredProperties, currentPage = (cur.filteredProperties.size + cur.pageSize - 1) / cur.pageSize)
         }
     }
 }
